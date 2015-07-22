@@ -78,7 +78,10 @@ module Restforce
     private
 
     def faraday_options
-      { url: "https://#{@options[:host]}",
+      # if there's http(s) at the beginning, take host as url, otherwise prepend https://
+      url = %r{^https?://}.match(@options[:host]) ? @options[:host] : "https://#{@options[:host]}"
+
+      { url: url,
         proxy: @options[:proxy_uri] }.reject { |k, v| v.nil? }
     end
   end
